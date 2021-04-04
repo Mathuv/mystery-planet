@@ -1,8 +1,5 @@
 # mystery-planet
 
-[![Build Status](https://travis-ci.org/mathuv/mystery-planet.svg?branch=master)](https://travis-ci.org/mathuv/mystery-planet)
-[![Built with](https://img.shields.io/badge/Built_with-Cookiecutter_Django_Rest-F7B633.svg)](https://github.com/agconti/cookiecutter-django-rest)
-
 Life on Mystery Planet. Check out the project's [documentation](http://mathuv.github.io/mystery-planet/).
 
 # Prerequisites

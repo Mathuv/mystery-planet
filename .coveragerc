@@ -8,3 +8,7 @@ omit = *migrations*,
        ./mystery-planet/config/*,
        ./mystery-planet/wsgi.py,
        *__init__*
+
+[report]
+exclude_lines =
+    if __name__ == .__main__.:
