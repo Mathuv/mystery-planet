@@ -24,6 +24,7 @@ class Common(Configuration):
 
         # Your apps
         'mystery_planet.users',
+        'mystery_planet.persons',
 
     )
 
