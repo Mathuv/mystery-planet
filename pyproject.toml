@@ -1,0 +1,48 @@
+[tool.isort]
+# Line length of import statements can be shorter(PEP8) than rest of the code.
+line_length = 79
+known_django = 'django'
+known_drf = 'rest_framework*'
+known_channels = 'channels'
+include_trailing_comma = true
+multi_line_output = 3
+sections = 'FUTURE,STDLIB,DJANGO,DRF,CHANNELS,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+DJANGO_SETTINGS_MODULE = "mystery-planet.config"
+DJANGO_CONFIGURATION = "Local"
+# addopts = "-ra -q"
+addopts = "--nomigrations -ra -q"
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
+python_classes = ["Test", "Acceptance"]
+python_functions = ["test"]
+testpaths = [
+    "tests",
+    "test", 
+    "integration",
+]
+
+[tool.black]
+line-length = 119
+target-version = ['py36']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.env
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
