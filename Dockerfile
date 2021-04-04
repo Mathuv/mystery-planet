@@ -12,4 +12,4 @@ WORKDIR code
 EXPOSE 8000
 
 # Run the production server
-CMD gunicorn --bind 0.0.0.0:$PORT --access-logfile - mystery-planet.wsgi:application
+CMD gunicorn --bind 0.0.0.0:$PORT --access-logfile - mystery_planet.wsgi:application

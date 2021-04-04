@@ -10,7 +10,7 @@ sections = 'FUTURE,STDLIB,DJANGO,DRF,CHANNELS,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-DJANGO_SETTINGS_MODULE = "mystery-planet.config"
+DJANGO_SETTINGS_MODULE = "mystery_planet.config"
 DJANGO_CONFIGURATION = "Local"
 # addopts = "-ra -q"
 addopts = "--nomigrations -ra -q"

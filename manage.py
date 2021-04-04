@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mystery-planet.config")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mystery_planet.config")
     os.environ.setdefault("DJANGO_CONFIGURATION", "Local")
 
     try:
