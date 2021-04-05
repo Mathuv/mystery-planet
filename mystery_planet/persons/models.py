@@ -61,9 +61,9 @@ class Friends(TimestampedModel, models.Model):
 
 class Food(TimestampedModel, models.Model):
     """Model to store the master data of different types of foods."""
-    FOOD_TYPE_FRUITS = "fruits"
-    FOOD_TYPE_VEGETABLES = "vegetables"
-    FOOD_TYPE_CHOICES = ((FOOD_TYPE_FRUITS, "Fruits"), (FOOD_TYPE_VEGETABLES, "Vegetables"))
+    FOOD_TYPE_FRUIT = "fruit"
+    FOOD_TYPE_VEGETABLE = "vegetable"
+    FOOD_TYPE_CHOICES = ((FOOD_TYPE_FRUIT, "Fruit"), (FOOD_TYPE_VEGETABLE, "Vegetable"))
 
     name = models.CharField(max_length=100, primary_key=True)
     type = models.CharField(max_length=50, choices=FOOD_TYPE_CHOICES)

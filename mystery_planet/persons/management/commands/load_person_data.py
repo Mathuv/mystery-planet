@@ -8,13 +8,13 @@ from django.core.management.base import BaseCommand, CommandError
 
 import dateparser
 
-from mystery_planet.persons.models import Person, Company
+from mystery_planet.persons.models import Person, Company, Friends, FavouriteFoods, Food
 
 DEFAULT_DATA_FILE = "resources/people.json"
 
 
 class Command(BaseCommand):
-    help = "Loads data into the model person.model.Company"
+    help = "Loads data into the model person.model.Person"
 
     def add_arguments(self, parser):
 
@@ -55,7 +55,8 @@ class Command(BaseCommand):
         missing_company_ids = []
         for person in data:
             if Company.objects.filter(index=person.get("company_id")).exists():
-                person_obj = Person(
+                # Create Person record
+                person_obj, _ = Person.objects.get_or_create(
                     index=person.get("index"),
                     guid=person.get("guid"),
                     name=person.get("name"),
@@ -73,15 +74,26 @@ class Command(BaseCommand):
                     registered=dateparser.parse(person.get("registered")),
                     company_id=person.get("company_id"),
                 )
-                person_list.append(person_obj)
+                # Create FavouriteFoods records
+                f_food_list = [
+                    FavouriteFoods(person=person_obj, food_id=f_food) for f_food in person.get("favouriteFood", [])
+                ]
+
+                FavouriteFoods.objects.bulk_create(f_food_list, batch_size=1000, ignore_conflicts=True)
+
+                # Create Friends records
+                friends_list = [
+                    Friends(person=person_obj, friend_id=person.get("index")) for friend in person.get("friends", [])
+                ]
+
+                Friends.objects.bulk_create(friends_list, batch_size=1000, ignore_conflicts=True)
+
             else:
                 missing_company_ids.append(person.get("company_id"))
 
-        # Bulk create company data
-        if not dryrun:
-            Person.objects.bulk_create(person_list, batch_size=10000, ignore_conflicts=True)
-
         self.stdout.write("Loading is finished!\n")
         self.stderr.write(
-            f"{len(missing_company_ids)} records were not inserted because following company_ids were not found in the database: {set(missing_company_ids)}. Please load the updated company data and run the command again to insert skipped persons."
+            f"{len(missing_company_ids)} records were not inserted "
+            f"because following company_ids were not found in the database: {set(missing_company_ids)}. "
+            f"Please load the updated company data and run the command again to insert skipped persons."
         )
