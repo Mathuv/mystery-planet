@@ -18,11 +18,13 @@ class TimestampedModel(models.Model):
 
 
 class Company(TimestampedModel, models.Model):
+    """Company master data."""
     index = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
 
 
 class Person(TimestampedModel, models.Model):
+    """Model for master data of a person."""
     GENDER_MALE = "male"
     GENDER_FEMALE = "female"
     GENDER_OTHER = "other"
@@ -48,3 +50,28 @@ class Person(TimestampedModel, models.Model):
     tags = models.JSONField(blank=True, null=True)
     registered = models.DateTimeField()
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="employees")
+
+
+class Friends(TimestampedModel, models.Model):
+    """A bridge table to store the many-to-many relationship between friends."""
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="friends")
+    friend = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="friend_of")
+    updated_at = None
+
+
+class Food(TimestampedModel, models.Model):
+    """Model to store the master data of different types of foods."""
+    FOOD_TYPE_FRUITS = "fruits"
+    FOOD_TYPE_VEGETABLES = "vegetables"
+    FOOD_TYPE_CHOICES = ((FOOD_TYPE_FRUITS, "Fruits"), (FOOD_TYPE_VEGETABLES, "Vegetables"))
+
+    name = models.CharField(max_length=100, primary_key=True)
+    type = models.CharField(max_length=50, choices=FOOD_TYPE_CHOICES)
+
+class FavouriteFoods(TimestampedModel, models.Model):
+    """Model to store the mapping between a person and their favvourite foods."""
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    updated_at = None
+
+
