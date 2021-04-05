@@ -37,3 +37,6 @@ model-bakery==1.2.1
 django-storages==1.11.1
 boto3==1.17.43
 
+# misc
+dateparser==1.0.0
+

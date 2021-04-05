@@ -12,6 +12,8 @@ services:
     command: >
       bash -c "python wait_for_postgres.py &&
                ./manage.py migrate &&
+               ./manage.py load_company_data &&
+               ./manage.py load_person_data &&
                ./manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/code
