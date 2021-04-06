@@ -4,6 +4,7 @@ from pprint import pprint
 from django.test import TestCase
 
 from model_bakery import baker
+from ..models import Food
 
 
 class TestCompanyModel(TestCase):
@@ -27,7 +28,20 @@ class TestPersonModel(TestCase):
 
 
 @pytest.mark.django_db
-def test_comnapy_model_create(company_factory):
+def test_compapy_model_create(company_factory):
     company = company_factory()
-    assert company.name == "company0"
+    assert company.name == "Company0"
     assert company.index == 0
+
+
+@pytest.mark.django_db
+def test_food_model_create(food_factory):
+    food = food_factory()
+    assert food.name == "Food0"
+    # assert food.type in [Food.FOOD_TYPE_VEGETABLE, Food.FOOD_TYPE_FRUIT]
+    assert food.type in Food.FOOD_TYPE_CHOICES
+
+@pytest.mark.django_db
+def test_person_model_create(person_factory):
+    person = person_factory()
+    assert person.name == "Person0"

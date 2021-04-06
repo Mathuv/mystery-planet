@@ -77,6 +77,7 @@ class Command(BaseCommand):
                     picture=person.get("picture"),
                     balance=Decimal(sub(r"[^\d.]", "", person.get("balance"))),
                     eye_color=person.get("eyeColor"),
+                    email = person.get("email"),
                     phone=person.get("phone"),
                     address=person.get("address"),
                     about=person.get("about"),

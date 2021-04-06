@@ -68,7 +68,7 @@ python manage.py runserver
 
 To run all the unit tests:
 ```bash
-pytest mystery-planet
+pytest mystery_planet
 ```
 
 ### Loading the data (ETL)

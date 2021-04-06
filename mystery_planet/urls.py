@@ -20,9 +20,9 @@ router.register(r"persons", PersonViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-    path('api/v1/persons/<int:person_id>/favourite-food', PersonFavouriteFoodView.as_view()),
-    path('api/v1/companies/<int:company_id>/employees', CompanyEmployeeView.as_view()),
-    path('api/v1/persons/<int:person1_id>/common-friends/<int:person2_id>', CommonFriends.as_view()),
+    path('api/v1/persons/<int:person_id>/favourite-food', PersonFavouriteFoodView.as_view(), name="favourite-food"),
+    path('api/v1/companies/<int:company_id>/employees', CompanyEmployeeView.as_view(), name="company-employees"),
+    path('api/v1/persons/<int:person1_id>/common-friends/<int:person2_id>', CommonFriends.as_view(), name="common-friends"),
     path('api-token-auth/', views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
