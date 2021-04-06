@@ -71,4 +71,53 @@ To run all the unit tests:
 pytest mystery-planet
 ```
 
+### Loading the data (ETL)
 
+Json files containing the data for companies, people and foods are found under the `resources` folder. 
+
+```
+companies.json - Company data
+people.json - people/persons data
+food.json - food (master) data
+```
+
+There are thee Django Management Commands to _**transform**_ and _**load**_ data into the database from each file.
+
+- Load company data (resources/companies.json)
+
+```bash
+ ./manage.py load_company_data
+```
+
+By default, the command uses the file resources/companies.json while a custom file can be provided with the command option '--data-file'
+
+
+```bash
+ ./manage.py load_company_data --data-file <DATA_FILE>
+```
+
+- Load food master data (resources/food.json)
+
+```bash
+ ./manage.py load_food_data
+```
+
+By default, the command uses the file resources/food.json while a custom file can be provided with the command option '--data-file'
+
+
+```bash
+ ./manage.py load_food_data --data-file <DATA_FILE>
+```
+
+- Load people data (resources/people.json)
+
+```bash
+ ./manage.py load_person_data
+```
+
+By default, the command uses the file resources/people.json while a custom file can be provided with the command option '--data-file'
+
+
+```bash
+ ./manage.py load_person_data --data-file <DATA_FILE>
+```
