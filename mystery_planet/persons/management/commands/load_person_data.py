@@ -9,7 +9,7 @@ from django.db.utils import InternalError
 
 import dateparser
 
-from mystery_planet.persons.models import Person, Company, Friends, FavouriteFoods, Food
+from mystery_planet.persons.models import Person, Company, Food
 
 DEFAULT_DATA_FILE = "resources/people.json"
 
@@ -63,6 +63,7 @@ class Command(BaseCommand):
                 missing_company_ids.append(person.get("company_id"))
                 skipped_person_ids.append(person.get("index"))
 
+        person_person_obj_map = {}
         for person in data_to_process:
             if not dryrun:
                 # Create Person record
@@ -84,21 +85,21 @@ class Command(BaseCommand):
                     registered=dateparser.parse(person.get("registered")),
                     company_id=person.get("company_id"),
                 )
-                # Create FavouriteFoods records
-                f_food_list = [
-                    FavouriteFoods(person=person_obj, food_id=f_food) for f_food in person.get("favouriteFood", [])
-                ]
 
-                FavouriteFoods.objects.bulk_create(f_food_list, batch_size=1000, ignore_conflicts=True)
+                # Add favourite foods
+                person_person_obj_map[person.get("index")] = person_obj
+                for f_food in person.get("favouriteFood", []):
+                    food_obj: Food = Food.objects.get(name=f_food)
+                    person_obj.favourite_foods.add(food_obj)
 
-                # Create Friends records
-                friends_list = [
-                    Friends(person=person_obj, friend_id=friend.get("index"))
-                    for friend in person.get("friends", [])
-                    if friend.get("index" not in skipped_person_ids)
-                ]
-
-                Friends.objects.bulk_create(friends_list, batch_size=1000, ignore_conflicts=True)
+        # Add friends
+        for person in data_to_process:
+            if not dryrun:
+                for friend in person.get("friends", []):
+                    if friend.get("index") not in skipped_person_ids:
+                        person_obj = person_person_obj_map.get(person.get("index"))
+                        friend_obj = Person.objects.get(index=friend.get("index"))
+                        person_obj.friends.add(friend_obj)
 
         self.stdout.write("Loading is finished!\n")
         self.stderr.write(

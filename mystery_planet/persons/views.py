@@ -8,12 +8,13 @@ from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Company, FavouriteFoods, Food, Person, Friends
+from .models import Company, Food, Person
 from .serializers import (
     CompanySerializer,
+    PersonDetailMinSerializer,
     PersonFavouriteFoodSerializer,
+    PersonsCommonFriendsSerializer,
     PersonSerializer,
-    PersonFriendsSerializer,
 )
 
 
@@ -50,11 +51,9 @@ class PersonFavouriteFoodView(views.APIView):
     def get(self, request, person_id):
         person: Person = self.get_queryset()
         data = self.serializer_class(person).data
-        fruits = FavouriteFoods.objects.filter(person=person, food__type=Food.FOOD_TYPE_FRUIT).values_list(
-            "food", flat=True
-        )
-        vegetables = FavouriteFoods.objects.filter(person=person, food__type=Food.FOOD_TYPE_VEGETABLE).values_list(
-            "food",
+        fruits = person.favourite_foods.filter(type=Food.FOOD_TYPE_FRUIT).values_list("name", flat=True)
+        vegetables = person.favourite_foods.filter(type=Food.FOOD_TYPE_VEGETABLE).values_list(
+            "name",
             flat=True,
         )
         data["fruits"] = fruits
@@ -83,30 +82,16 @@ class CommonFriends(views.APIView):
     and the list of their friends in common which have brown eyes and are still alive.
     """
 
-    serializer_class = PersonFriendsSerializer
+    serializer_class = PersonDetailMinSerializer
     permission_classes = (AllowAny,)
 
     def get(self, request, person1_id, person2_id):
-        breakpoint()
         person_1: Person = Person.objects.get(index=person1_id)
         person_2: Person = Person.objects.get(index=person2_id)
-        # person_1_friends: List[Person] = Friends.objects.select_related("friend").filter(person=person_1)
-        person_1_friends: List[Person] = Person.objects.raw(
-            " select p.* from persons_person p inner join persons_friends f on f.friend_id = p.index where f.person_id = %s",
-            [person1_id],
-        )
+        common_friends = person_1.friends.all() & person_2.friends.all()
+        common_friends_alive_brown = common_friends.filter(has_died=False, eye_color=Person.EYE_BROWN)
 
-        # person_2_friends: List[Person] = Friends.objects.select_related("friend").filter(person=person_2)
-        person_2_friends: List[Person] = Person.objects.raw(
-            " select p.* from persons_person p inner join persons_friends f on f.friend_id = p.index where f.person_id = %s",
-            [person2_id],
-        )
-        # common_friends: List[Person] = list(Friends.objects.filter(person=person_1) & Friends.objects.filter(person=person_2))
-        # common_friends = person_1_friends & person_2_friends
-        common_friends = person_1_friends.intersection(person_2_friends)
+        d = {"person_1": person_1, "person_2": person_2, "common_friends": common_friends_alive_brown}
+        data = PersonsCommonFriendsSerializer(d).data
 
-        data = {
-            "person1_id": person1_id,
-            "person2_id": person2_id,
-        }
         return Response(data=data)

@@ -24,6 +24,17 @@ class Company(TimestampedModel, models.Model):
     name = models.CharField(max_length=50, unique=True)
 
 
+class Food(TimestampedModel, models.Model):
+    """Model to store the master data of different types of foods."""
+
+    FOOD_TYPE_FRUIT = "fruit"
+    FOOD_TYPE_VEGETABLE = "vegetable"
+    FOOD_TYPE_CHOICES = ((FOOD_TYPE_FRUIT, "Fruit"), (FOOD_TYPE_VEGETABLE, "Vegetable"))
+
+    name = models.CharField(max_length=100, primary_key=True)
+    type = models.CharField(max_length=50, choices=FOOD_TYPE_CHOICES)
+
+
 class Person(TimestampedModel, models.Model):
     """Model for master data of a person."""
 
@@ -52,36 +63,5 @@ class Person(TimestampedModel, models.Model):
     tags = models.JSONField(blank=True, null=True)
     registered = models.DateTimeField()
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="employees")
-
-
-class Friends(TimestampedModel, models.Model):
-    """A bridge table to store the many-to-many relationship between friends."""
-
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="friends")
-    friend = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="friend_of")
-    updated_at = None
-
-    class Meta:
-        unique_together = (("person"), ("friend"))
-
-
-class Food(TimestampedModel, models.Model):
-    """Model to store the master data of different types of foods."""
-
-    FOOD_TYPE_FRUIT = "fruit"
-    FOOD_TYPE_VEGETABLE = "vegetable"
-    FOOD_TYPE_CHOICES = ((FOOD_TYPE_FRUIT, "Fruit"), (FOOD_TYPE_VEGETABLE, "Vegetable"))
-
-    name = models.CharField(max_length=100, primary_key=True)
-    type = models.CharField(max_length=50, choices=FOOD_TYPE_CHOICES)
-
-
-class FavouriteFoods(TimestampedModel, models.Model):
-    """Model to store the mapping between a person and their favvourite foods."""
-
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    updated_at = None
-
-    class Meta:
-        unique_together = (("person"), ("food"))
+    favourite_foods = models.ManyToManyField(Food)
+    friends = models.ManyToManyField("self")

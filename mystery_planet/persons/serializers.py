@@ -22,8 +22,13 @@ class PersonFavouriteFoodSerializer(serializers.Serializer):
     vegetables = serializers.ListField(child=serializers.CharField(), default=[])
 
 
-class PersonFriendsSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    age = serializers.IntegerField()
-    address = serializers.CharField()
-    phone = serializers.CharField()
+class PersonDetailMinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ("name", "age", "address", "phone")
+
+
+class PersonsCommonFriendsSerializer(serializers.Serializer):
+    person_1 = PersonDetailMinSerializer()
+    person_2 = PersonDetailMinSerializer()
+    common_friends = PersonDetailMinSerializer(many=True)
