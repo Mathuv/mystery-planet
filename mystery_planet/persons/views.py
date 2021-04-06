@@ -61,3 +61,14 @@ class PersonFavouriteFoodView(views.APIView):
     def get_queryset(self):
         person_id = self.kwargs.get("person_id")
         return Person.objects.get(index=person_id)
+
+
+class CompanyEmployeeView(generics.ListAPIView):
+    """Given a company, return all their employees."""
+
+    permission_classes = (AllowAny,)
+    serializer_class = PersonSerializer
+
+    def get_queryset(self):
+        company_id = self.kwargs.get("company_id")
+        return Person.objects.filter(company_id=company_id)
