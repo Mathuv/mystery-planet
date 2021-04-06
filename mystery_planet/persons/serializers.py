@@ -20,3 +20,10 @@ class PersonFavouriteFoodSerializer(serializers.Serializer):
     age = serializers.IntegerField()
     fruits = serializers.ListField(child=serializers.CharField(), default=[])
     vegetables = serializers.ListField(child=serializers.CharField(), default=[])
+
+
+class PersonFriendsSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    age = serializers.IntegerField()
+    address = serializers.CharField()
+    phone = serializers.CharField()

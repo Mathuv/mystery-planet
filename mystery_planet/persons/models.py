@@ -61,6 +61,9 @@ class Friends(TimestampedModel, models.Model):
     friend = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="friend_of")
     updated_at = None
 
+    class Meta:
+        unique_together = (("person"), ("friend"))
+
 
 class Food(TimestampedModel, models.Model):
     """Model to store the master data of different types of foods."""

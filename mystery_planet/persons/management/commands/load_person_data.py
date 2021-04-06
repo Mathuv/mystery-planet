@@ -5,6 +5,7 @@ from re import sub
 from typing import Any, Dict, List
 
 from django.core.management.base import BaseCommand, CommandError
+from django.db.utils import InternalError
 
 import dateparser
 
@@ -53,8 +54,17 @@ class Command(BaseCommand):
 
         person_list = []
         missing_company_ids = []
+        skipped_person_ids = []
+        data_to_process = []
         for person in data:
             if Company.objects.filter(index=person.get("company_id")).exists():
+                data_to_process.append(person)
+            else:
+                missing_company_ids.append(person.get("company_id"))
+                skipped_person_ids.append(person.get("index"))
+
+        for person in data_to_process:
+            if not dryrun:
                 # Create Person record
                 person_obj, _ = Person.objects.get_or_create(
                     index=person.get("index"),
@@ -83,13 +93,12 @@ class Command(BaseCommand):
 
                 # Create Friends records
                 friends_list = [
-                    Friends(person=person_obj, friend_id=person.get("index")) for friend in person.get("friends", [])
+                    Friends(person=person_obj, friend_id=friend.get("index"))
+                    for friend in person.get("friends", [])
+                    if friend.get("index" not in skipped_person_ids)
                 ]
 
                 Friends.objects.bulk_create(friends_list, batch_size=1000, ignore_conflicts=True)
-
-            else:
-                missing_company_ids.append(person.get("company_id"))
 
         self.stdout.write("Loading is finished!\n")
         self.stderr.write(
