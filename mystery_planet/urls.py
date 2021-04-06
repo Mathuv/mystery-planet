@@ -6,7 +6,7 @@ from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from .users.views import UserViewSet, UserCreateViewSet
-from .persons.views import CompanyVieSet, PersonViewSet
+from .persons.views import CompanyVieSet, PersonViewSet, PersonFavouriteFoodView
 
 router = DefaultRouter()
 # users
@@ -20,6 +20,7 @@ router.register(r"persons", PersonViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
+    path('api/v1/persons/<int:person_id>/favourite-food', PersonFavouriteFoodView.as_view()),
     path('api-token-auth/', views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 

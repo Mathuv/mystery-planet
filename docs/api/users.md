@@ -45,7 +45,7 @@ authenticating future requests to the API. See [Authentication](authentication.m
 
 **Request**:
 
-`GET` `/users/:id`
+`GET` `/users/:id/`
 
 Parameters:
 
