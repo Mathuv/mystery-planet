@@ -50,7 +50,7 @@ class TestPersonAPIs:
     @pytest.mark.django_db
     def test_person_favourite_foods_view(self, api_clinet, food_factory, person_factory):
         person: Person = person_factory()
-        url = reverse("favourite-food", )
+        url = reverse("favourite-food", kwargs={"person_id": person.index})
         response: Response = api_clinet.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert response.data
