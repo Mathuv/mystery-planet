@@ -1,47 +1,38 @@
 import pytest
-from pprint import pprint
 
-from django.test import TestCase
-
-from model_bakery import baker
-from ..models import Food
-
-
-class TestCompanyModel(TestCase):
-    def setUp(self):
-        self.company = baker.make("persons.Company")
-        pprint(self.company.__dict__)
-
-    def test_company_attrs(self):
-        self.assertTrue(self.company.name)
-        self.assertTrue(self.company.index)
-
-
-class TestPersonModel(TestCase):
-    def setUp(self):
-        self.person = baker.make("persons.Person")
-        pprint(self.person.__dict__)
-
-    def test_person_attrs(self):
-        self.assertTrue(self.person.name)
-        self.assertTrue(self.person.age)
+from ..models import Company, Food, Person
 
 
 @pytest.mark.django_db
 def test_compapy_model_create(company_factory):
     company = company_factory()
-    assert company.name == "Company0"
-    assert company.index == 0
+    company_db = Company.objects.get(index=company.index)
+    assert company_db.name == company.name
+    assert company_db.index == company.index
 
 
 @pytest.mark.django_db
 def test_food_model_create(food_factory):
     food = food_factory()
-    assert food.name == "Food0"
-    # assert food.type in [Food.FOOD_TYPE_VEGETABLE, Food.FOOD_TYPE_FRUIT]
-    assert food.type in Food.FOOD_TYPE_CHOICES
+    food_db = Food.objects.get(name=food.name)
+    assert food_db.name == food.name
+    assert food_db.type == food.type
+    assert food_db.type in [Food.FOOD_TYPE_FRUIT, Food.FOOD_TYPE_VEGETABLE]
+
 
 @pytest.mark.django_db
-def test_person_model_create(person_factory):
-    person = person_factory()
-    assert person.name == "Person0"
+def test_person_model_create(person_factory, food_factory, company_factory):
+    food_1: Food = food_factory()
+    food_2: Food = food_factory()
+    food_3: Food = food_factory()
+    friend_1: Person = person_factory()
+    friend_2: Person = person_factory()
+    company: Company = company_factory()
+    person: Person = person_factory(
+        favourite_foods=(food_1, food_2, food_3), friends=(friend_1, friend_2), company=(company)
+    )
+    person_db = Person.objects.get(index=person.index)
+    assert person_db.name == person.name
+    assert person_db.friends
+    assert person_db.favourite_foods
+    assert person_db.company
