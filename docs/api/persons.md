@@ -1,5 +1,5 @@
 # Persons
-Supports CRUD operations on person records.
+Supports CRUD and other operations on person records.
 
 
 ## Get employees of a company (1)
@@ -226,7 +226,7 @@ This is second method to retrieve all the employees of a company which is based 
 Parameters:
 
 Name       | Type    | Description
------------|- -------|---
+-----------|---------|---
 index      | integer | The ID value of the company object
 
 

@@ -54,7 +54,7 @@ DJANGO_SECRET_KEY=<secret_key>
 DATABASE_URL=postgres://<postgres_user>:<postgres_password>@<postgres_host>:5432/<postgres_db>
 ```
 
-To apply the migrations to the databse:
+To apply the migrations to the database:
 
 ```bash
 python manage.py migrate
@@ -81,7 +81,7 @@ people.json - people/persons data
 food.json - food (master) data
 ```
 
-There are thee Django Management Commands to _**transform**_ and _**load**_ data into the database from each file.
+There are three Django Management Commands to _**transform**_ and _**load**_ data into the database from each file.
 
 - Load company data (resources/companies.json)
 
@@ -129,14 +129,15 @@ By default, the command uses the file resources/people.json while a custom file 
 ```markdown
 ## Todo
 
-- [ ] Add more docstrings and inline comments
-- [ ] Improve the performance of the management command 'load_person_data'
-- [ ] Add logging
-- [ ] Handle exceptional conditions
+- [ ] Add more docstrings and inline comments.
+- [ ] Improve the performance of the management command 'load_person_data'.
+- [ ] Add logging.
+- [ ] Handle exceptional conditions.
+- [ ] Consolidate the migration files.
 
 ## In Progress
 
-- [ ] Write more unit tests and integration tests
+- [ ] Write more unit tests and integration tests.
 
 ## Done
 ```
