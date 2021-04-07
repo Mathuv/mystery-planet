@@ -21,14 +21,13 @@ class FoodFactory(factory.django.DjangoModelFactory):
         model = Food
 
     name = factory.Sequence(lambda n: f"Food{n}")
-    type = FuzzyChoice(Food.FOOD_TYPE_CHOICES)
+    type = FuzzyChoice([Food.FOOD_TYPE_FRUIT, Food.FOOD_TYPE_VEGETABLE])
 
 
 class PersonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Person
 
-    # guid = FuzzyText(length=10, chars=string.ascii_lowercase + string.digits)
     age = FuzzyInteger(21, 99)
     eye_color = FuzzyChoice([Person.EYE_BLUE, Person.EYE_BROWN])
     name = factory.Sequence(lambda n: f"Person{n}")
