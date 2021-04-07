@@ -2,13 +2,13 @@
 
 Life on Mystery Planet. Check out the project's [documentation](http://mathuv.github.io/mystery-planet/).
 
-# Prerequisites
+# 1. Prerequisites
 
 - [Docker](https://docs.docker.com/docker-for-mac/install/)  
 
-# Local Development
+# 2. Local Development
 
-## With Docker
+## 2.1. With Docker
 
 Start the dev server for local development:
 ```bash
@@ -21,7 +21,7 @@ Run a command inside the docker container:
 docker-compose run --rm web [command]
 ```
 
-### Local documentation access
+### 2.1.1. Local documentation access
 
 Main documentation site:
 
@@ -31,7 +31,7 @@ Documentation of APIs related to people/persons
 
 - [http://localhost:8001/api/persons/](http://localhost:8001/api/persons/)
 
-## Without docker
+## 2.2. Without docker
 
 Create python virtual environment and activate it.
 
@@ -71,7 +71,7 @@ To run all the unit tests:
 pytest mystery_planet
 ```
 
-### Loading the data (ETL)
+### 2.2.1. Loading the data (ETL)
 
 Json files containing the data for companies, people and foods are found under the `resources` folder. 
 
@@ -98,6 +98,8 @@ By default, the command uses the file resources/companies.json while a custom fi
 
 - Load food master data (resources/food.json)
 
+The file food.json is created to hold the data of different food items and their type (such as fruits, vegetables etc) which are found under people.json.
+
 ```bash
  ./manage.py load_food_data
 ```
@@ -121,3 +123,21 @@ By default, the command uses the file resources/people.json while a custom file 
 ```bash
  ./manage.py load_person_data --data-file <DATA_FILE>
 ```
+
+# 3. TODO
+
+```markdown
+## Todo
+
+- [ ] Add more docstrings and inline comments
+- [ ] Improve the performance of the management command 'load_person_data'
+- [ ] Add logging
+- [ ] Handle exceptional conditions
+
+## In Progress
+
+- [ ] Write more unit tests and integration tests
+
+## Done
+```
+
